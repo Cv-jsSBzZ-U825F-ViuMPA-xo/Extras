@@ -452,7 +452,7 @@ char:SetAttribute("UltimateName", "CANSOL")
 end
 Start()
 
-getgenv().pepe = lp.CharacterAdded:Connect(function(c)
+getgenv().pepe = game.Players.LocalPlayer.CharacterAdded:Connect(function(c)
 repeat task.wait() until game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart')
 Start()
 end)
