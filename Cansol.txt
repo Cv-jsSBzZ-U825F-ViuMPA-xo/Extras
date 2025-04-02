@@ -1,167 +1,302 @@
 -- I'm sorry if this code is unorganized or messy, I had never practiced optimization.
 -- I learned from the worst at it after all.
 
-
 function Start()
+    --Variables
+    local lp = game.Players.LocalPlayer
+    local char = lp.Character
+    local hrp = char.HumanoidRootPart
 
-
---Variables
-local lp = game.Players.LocalPlayer
-local char = lp.Character
-local hrp = char.HumanoidRootPart
-
--- Don't remove, The disconnect stops AnimationPlayed stacking.
-pcall(
-    function()
-        getgenv().Main:Disconnect()
-    end
-)
-
---Functions
-function PlayAnim(ID, Time, Speed, TimeToStop, PlayTween, StopTween, Priority)
-    local Anim = Instance.new("Animation")
-    Anim.AnimationId = "rbxassetid://" .. ID
-    local k = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
-    k:Play(PlayTween)
-    k.TimePosition = Time
-    k.Priority = Priority
-    k:AdjustSpeed(Speed)
-    if TimeToStop == nil then
-        return
-    end
-    task.delay(
-        TimeToStop,
+    -- Don't remove, The disconnect stops AnimationPlayed stacking.
+    pcall(
         function()
-            k:Stop(StopTween)
+            getgenv().Main:Disconnect()
         end
     )
-end
---The main part of the script.
-getgenv().Main =
-    char.Humanoid.AnimationPlayed:Connect(
-    function(v)
-        if v.Animation.AnimationId == "rbxassetid://10468665991" then
-            --Second Move
-            v:Stop()
-            --First Move
-            local Anim = Instance.new("Animation")
-            Anim.AnimationId = "rbxassetid://104895379416342"
-            local k = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
-            k:Play(.2)
-            k:AdjustSpeed(.2)
-            local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Jump.Jump:Clone()
-            Flake.CFrame = hrp.CFrame * CFrame.new(0, -3, 0)
-            Flake.Parent = char
-            Flake.Anchored = true
-            game:GetService("Debris"):AddItem(Flake, 5)
-            for _, Particle in ipairs(Flake:GetDescendants()) do
-                if Particle:IsA("ParticleEmitter") then
-                    Particle:Emit(1)
 
-                    Particle.Color =
-                        ColorSequence.new {
-                        ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
-                        ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
-                    }
-                end
+    --Functions
+    function PlayAnim(ID, Time, Speed, TimeToStop, PlayTween, StopTween, Priority)
+        local Anim = Instance.new("Animation")
+        Anim.AnimationId = "rbxassetid://" .. ID
+        local k = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
+        k:Play(PlayTween)
+        k.TimePosition = Time
+        k.Priority = Priority
+        k:AdjustSpeed(Speed)
+        if TimeToStop == nil then
+            return
+        end
+        task.delay(
+            TimeToStop,
+            function()
+                k:Stop(StopTween)
             end
-            task.wait(.6)
-            k:AdjustSpeed(1.5)
-            local sound = Instance.new("Sound")
-            sound.Parent = char.Head
-            sound.SoundId = "rbxassetid://12509593160"
-            sound:Play()
-            sound.PlaybackSpeed = 1
-            task.delay(
-                .6,
-                function()
-                    game:GetService("TweenService"):Create(
-                        sound,
-                        TweenInfo.new(.5),
-                        {
-                            Volume = 0
+        )
+    end
+    --The main part of the script.
+    getgenv().Main =
+        char.Humanoid.AnimationPlayed:Connect(
+        function(v)
+            if v.Animation.AnimationId == "rbxassetid://10468665991" then
+                --First Move
+                v:Stop()
+
+                local Anim = Instance.new("Animation")
+                Anim.AnimationId = "rbxassetid://104895379416342"
+                local k = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
+                k:Play(.2)
+                k:AdjustSpeed(.2)
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Jump.Jump:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, -3, 0)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(1)
+
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
                         }
-                    ):Play()
-                    sound:Destroy()
+                    end
                 end
-            )
-            local Flake = game:GetService("ReplicatedStorage").Resources.Chain.FlakeSummon.FlakeSummon:Clone()
-            Flake.CFrame = hrp.CFrame * CFrame.new(0, 1, -2)
-            Flake.Parent = char
-            Flake.Anchored = true
-            game:GetService("Debris"):AddItem(Flake, 5)
-            for _, Particle in ipairs(Flake.Attachment:GetChildren()) do
-                Particle:Emit(5)
+                task.wait(.6)
+                k:AdjustSpeed(1.5)
+                local sound = Instance.new("Sound")
+                sound.Parent = char.Head
+                sound.SoundId = "rbxassetid://12509593160"
+                sound:Play()
+                sound.PlaybackSpeed = 1
+                task.delay(
+                    .6,
+                    function()
+                        game:GetService("TweenService"):Create(
+                            sound,
+                            TweenInfo.new(.5),
+                            {
+                                Volume = 0
+                            }
+                        ):Play()
+                        sound:Destroy()
+                    end
+                )
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.FlakeSummon.FlakeSummon:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, 1, -2)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake.Attachment:GetChildren()) do
+                    Particle:Emit(5)
 
-                Particle.Color =
-                    ColorSequence.new {
-                    ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
-                    ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
-                }
-            end
-            local Flake = game:GetService("ReplicatedStorage").Resources.Chain.FlakeHit.FlakeHit:Clone()
-            Flake.CFrame = hrp.CFrame * CFrame.new(.5, .5, -2)
-            Flake.Parent = char
-            Flake.Anchored = true
-            game:GetService("Debris"):AddItem(Flake, 5)
-            for _, Particle in ipairs(Flake.Attachment:GetChildren()) do
-                Particle:Emit(6)
-                Particle.Lifetime = NumberRange.new(1)
-                Particle.Color =
-                    ColorSequence.new {
-                    ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
-                    ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
-                }
-            end
-            local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Throw2.Throw2:Clone()
-            Flake.CFrame = hrp.CFrame * CFrame.new(0, -3, 0)
-            Flake.Parent = char
-            Flake.Anchored = true
-            game:GetService("Debris"):AddItem(Flake, 5)
-            for _, Particle in ipairs(Flake:GetDescendants()) do
-                if Particle:IsA("ParticleEmitter") then
-                    Particle:Emit(15)
                     Particle.Color =
                         ColorSequence.new {
                         ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
                         ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
                     }
                 end
-            end
-            local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Slam.Slam:Clone()
-            Flake.CFrame = hrp.CFrame * CFrame.new(0, -3, 0)
-            Flake.Parent = char
-            Flake.Anchored = true
-            game:GetService("Debris"):AddItem(Flake, 5)
-            for _, Particle in ipairs(Flake:GetDescendants()) do
-                if Particle:IsA("ParticleEmitter") then
-                    Particle:Emit(3)
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.FlakeHit.FlakeHit:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(.5, .5, -2)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake.Attachment:GetChildren()) do
+                    Particle:Emit(6)
+                    Particle.Lifetime = NumberRange.new(1)
                     Particle.Color =
                         ColorSequence.new {
                         ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
                         ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
                     }
                 end
-            end
-        elseif v.Animation.AnimationId == "rbxassetid://10466974800" then
-            --Third Move
-            v:Stop()
-            local animTable = {
-                "123005629431309",
-                "100059874351664",
-                "104895379416342",
-                "134775406437626"
-            }
-            task.spawn(
-                function()
-                    for i = 1, 4 do
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Throw2.Throw2:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, -3, 0)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(15)
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Slam.Slam:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, -3, 0)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(3)
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+            elseif v.Animation.AnimationId == "rbxassetid://10466974800" then
+                --Second Move
+                v:Stop()
+                spawn(
+                    function()
+                        char:WaitForChild("BarrageBind"):Destroy()
+                        char["Right Arm"].Transparency = 0
+                        char["Left Arm"].Transparency = 0
+                    end
+                )
+                local animTable = {
+                    "123005629431309",
+                    "100059874351664",
+                    "104895379416342",
+                    "134775406437626"
+                }
+                task.spawn(
+                    function()
+                        for i = 1, 4 do
+                            local sound = Instance.new("Sound")
+                            sound.Parent = char.Head
+                            sound.SoundId = "rbxassetid://12502825319"
+                            sound:Play()
+                            sound.PlaybackSpeed = .5 + math.random(-15, 15) / 254
+                            task.delay(
+                                .5,
+                                function()
+                                    game:GetService("TweenService"):Create(
+                                        sound,
+                                        TweenInfo.new(.5),
+                                        {
+                                            Volume = 0
+                                        }
+                                    ):Play()
+                                    task.wait(.5)
+                                    sound:Destroy()
+                                end
+                            )
+                            local Table = animTable[math.random(1, #animTable)]
+                            PlayAnim(
+                                Table, -- Animation ID
+                                0, -- Time Position
+                                1, -- Animation Speed
+                                .3, -- When to stop the animation
+                                0, -- Play Tween
+                                .1, -- End Tween
+                                Enum.AnimationPriority.Action2
+                                --Priority to show rather than other animations
+                            )
+
+                            if Table == "134775406437626" then
+                                task.delay(
+                                    .3,
+                                    function()
+                                        local sound = Instance.new("Sound")
+                                        sound.Parent = char.Head
+                                        sound.SoundId = "rbxassetid://12685117669"
+                                        sound:Play()
+                                        sound.PlaybackSpeed = 1 + math.random(-15, 15) / 254
+                                        task.delay(
+                                            .4,
+                                            function()
+                                                game:GetService("TweenService"):Create(
+                                                    sound,
+                                                    TweenInfo.new(.5),
+                                                    {
+                                                        Volume = 0
+                                                    }
+                                                ):Play()
+                                                task.wait(.5)
+                                                sound:Destroy()
+                                            end
+                                        )
+
+                                        local Flake =
+                                            game:GetService("ReplicatedStorage").Resources.Chain.FlakeHit.FlakeHit:Clone(
+
+                                        )
+                                        Flake.CFrame = hrp.CFrame * CFrame.new(0, .5, -2)
+                                        Flake.Parent = char
+                                        Flake.Anchored = true
+                                        game:GetService("Debris"):AddItem(Flake, .2)
+                                        for _, Particle in ipairs(Flake.Attachment:GetChildren()) do
+                                            Particle:Emit(2)
+                                            Particle.Lifetime = NumberRange.new(.2)
+                                            Particle.Color =
+                                                ColorSequence.new {
+                                                ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                                                ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                                            }
+                                        end
+                                    end
+                                )
+                            end
+                            task.wait(.3)
+                        end
+                        local Anim = Instance.new("Animation")
+                        Anim.AnimationId = "rbxassetid://134775406437626"
+                        local End = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
+                        End:Play()
+                        End:AdjustSpeed(1)
+                        task.delay(
+                            .3,
+                            function()
+                                local Flake =
+                                    game:GetService("ReplicatedStorage").Resources.Chain.FlakeHit.FlakeHit:Clone()
+                                Flake.CFrame = hrp.CFrame * CFrame.new(0, .5, -2)
+                                Flake.Parent = char
+                                Flake.Anchored = true
+                                game:GetService("Debris"):AddItem(Flake, 1)
+                                for _, Particle in ipairs(Flake.Attachment:GetChildren()) do
+                                    Particle:Emit(2)
+                                    Particle.Lifetime = NumberRange.new(1)
+                                    Particle.Color =
+                                        ColorSequence.new {
+                                        ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                                        ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                                    }
+                                end
+                            end
+                        )
+                    end
+                )
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Jump.Jump:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, -3, 0)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(1)
+                        game:GetService("TweenService"):Create(
+                            Particle,
+                            TweenInfo.new(3),
+                            {
+                                Rate = 0
+                            }
+                        ):Play()
+                        Particle.Enabled = true
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+                task.delay(
+                    1.5,
+                    function()
                         local sound = Instance.new("Sound")
                         sound.Parent = char.Head
-                        sound.SoundId = "rbxassetid://12502825319"
+                        sound.SoundId = "rbxassetid://12685117669"
                         sound:Play()
-                        sound.PlaybackSpeed = .5 + math.random(-15, 15) / 254
+                        sound.Volume = 1.4
+                        sound.PlaybackSpeed = 1 + math.random(-15, 15) / 254
                         task.delay(
-                            .5,
+                            .4,
                             function()
                                 game:GetService("TweenService"):Create(
                                     sound,
@@ -174,288 +309,387 @@ getgenv().Main =
                                 sound:Destroy()
                             end
                         )
-                        local Table = animTable[math.random(1, #animTable)]
-                        PlayAnim(
-                            Table, -- Animation ID
-                            0, -- Time Position
-                            1, -- Animation Speed
-                            .3, -- When to stop the animation
-                            0, -- Play Tween
-                            .1, -- End Tween
-                            Enum.AnimationPriority.Action2
-                            --Priority to show rather than other animations
-                        )
-
-                        if Table == "134775406437626" then
-                            task.delay(
-                                .3,
-                                function()
-                                    local sound = Instance.new("Sound")
-                                    sound.Parent = char.Head
-                                    sound.SoundId = "rbxassetid://12685117669"
-                                    sound:Play()
-                                    sound.PlaybackSpeed = 1 + math.random(-15, 15) / 254
-                                    task.delay(
-                                        .4,
-                                        function()
-                                            game:GetService("TweenService"):Create(
-                                                sound,
-                                                TweenInfo.new(.5),
-                                                {
-                                                    Volume = 0
-                                                }
-                                            ):Play()
-                                            task.wait(.5)
-                                            sound:Destroy()
-                                        end
-                                    )
-
-                                    local Flake =
-                                        game:GetService("ReplicatedStorage").Resources.Chain.FlakeHit.FlakeHit:Clone()
-                                    Flake.CFrame = hrp.CFrame * CFrame.new(0, .5, -2)
-                                    Flake.Parent = char
-                                    Flake.Anchored = true
-                                    game:GetService("Debris"):AddItem(Flake, .2)
-                                    for _, Particle in ipairs(Flake.Attachment:GetChildren()) do
-                                        Particle:Emit(2)
-                                        Particle.Lifetime = NumberRange.new(.2)
-                                        Particle.Color =
-                                            ColorSequence.new {
-                                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
-                                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
-                                        }
-                                    end
-                                end
-                            )
-                        end
-                        task.wait(.3)
                     end
-                    local Anim = Instance.new("Animation")
-                    Anim.AnimationId = "rbxassetid://134775406437626"
-                    local End = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
-                    End:Play()
-                    End:AdjustSpeed(1)
-                    task.delay(
-                        .3,
-                        function()
-                            local Flake = game:GetService("ReplicatedStorage").Resources.Chain.FlakeHit.FlakeHit:Clone()
-                            Flake.CFrame = hrp.CFrame * CFrame.new(0, .5, -2)
-                            Flake.Parent = char
-                            Flake.Anchored = true
-                            game:GetService("Debris"):AddItem(Flake, 1)
-                            for _, Particle in ipairs(Flake.Attachment:GetChildren()) do
-                                Particle:Emit(2)
-                                Particle.Lifetime = NumberRange.new(1)
-                                Particle.Color =
-                                    ColorSequence.new {
-                                    ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
-                                    ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
-                                }
-                            end
-                        end
-                    )
-                end
-            )
-            local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Jump.Jump:Clone()
-            Flake.CFrame = hrp.CFrame * CFrame.new(0, -3, 0)
-            Flake.Parent = char
-            Flake.Anchored = true
-            game:GetService("Debris"):AddItem(Flake, 5)
-            for _, Particle in ipairs(Flake:GetDescendants()) do
-                if Particle:IsA("ParticleEmitter") then
-                    Particle:Emit(1)
-                    game:GetService("TweenService"):Create(
-                        Particle,
-                        TweenInfo.new(3),
-                        {
-                            Rate = 0
-                        }
-                    ):Play()
-                    Particle.Enabled = true
-                    Particle.Color =
-                        ColorSequence.new {
-                        ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
-                        ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
-                    }
-                end
-            end
-            task.delay(
-                1.5,
-                function()
-                    local sound = Instance.new("Sound")
-                    sound.Parent = char.Head
-                    sound.SoundId = "rbxassetid://12685117669"
-                    sound:Play()
-                    sound.PlaybackSpeed = 1 + math.random(-15, 15) / 254
-                    task.delay(
-                        .4,
-                        function()
-                            game:GetService("TweenService"):Create(
-                                sound,
-                                TweenInfo.new(.5),
-                                {
-                                    Volume = 0
-                                }
-                            ):Play()
-                            task.wait(.5)
-                            sound:Destroy()
-                        end
-                    )
-                end
-            )
-        elseif v.Animation.AnimationId == "rbxassetid://10471336737" then
-            --Fourth Move
-            v:Stop()
+                )
+            elseif v.Animation.AnimationId == "rbxassetid://10471336737" then
+                --Fourth Move
+                v:Stop()
 
-            PlayAnim(
-                94020267622363, -- Animation ID
-                11.5, -- Time Position
-                1.5, -- Animation Speed
-                .5, -- When to stop the animation
-                .1, -- Play Tween
-                .4, -- End Tween
-                Enum.AnimationPriority.Action2
-                --Priority to show rather than other animations
-            )
-            task.wait(.3)
-            local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Throw2.Throw2:Clone()
-            Flake.CFrame = hrp.CFrame * CFrame.new(0, 0, -3)
-            Flake.Parent = char
-            Flake.Anchored = true
-            game:GetService("Debris"):AddItem(Flake, 5)
-            for _, Particle in ipairs(Flake:GetDescendants()) do
-                if Particle:IsA("ParticleEmitter") then
-                    Particle:Emit(15)
-                    Particle.Color =
-                        ColorSequence.new {
-                        ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
-                        ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
-                    }
-                end
-            end
-            local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Punch.Punch:Clone()
-            Flake.CFrame = hrp.CFrame * CFrame.new(0, 0, -5)
-            Flake.Parent = char
-            Flake.Anchored = true
-            game:GetService("Debris"):AddItem(Flake, 5)
-            for _, Particle in ipairs(Flake:GetDescendants()) do
-                if Particle:IsA("ParticleEmitter") then
-                    Particle:Emit(3)
-                    Particle.Color =
-                        ColorSequence.new {
-                        ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
-                        ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
-                    }
-                end
-            end
-
-            local sound = Instance.new("Sound")
-            sound.Parent = char.Head
-            sound.SoundId = "rbxassetid://12685117669"
-            sound:Play()
-            sound.PlaybackSpeed = 1 + math.random(-15, 15) / 254
-            task.delay(
-                .4,
-                function()
-                    game:GetService("TweenService"):Create(
-                        sound,
-                        TweenInfo.new(.5),
-                        {
-                            Volume = 0
+                PlayAnim(
+                    116753755471636, -- Animation ID
+                    .6, -- Time Position
+                    1.8, -- Animation Speed
+                    .5, -- When to stop the animation
+                    .3, -- Play Tween
+                    .4, -- End Tween
+                    Enum.AnimationPriority.Action2
+                    --Priority to show rather than other animations
+                )
+                task.wait(.3)
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Throw2.Throw2:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, 0, -3)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(15)
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
                         }
-                    ):Play()
-                    task.wait(.5)
-                    sound:Destroy()
-                end
-            )
-        elseif v.Animation.AnimationId == "rbxassetid://12510170988" then
-            v:Stop()
-            local Velocity =
-                hrp.ChildAdded:Connect(
-                function(child)
-                    if child:IsA("BodyVelocity") then
-                        child.MaxForce = Vector3.new(0, 0, 0)
                     end
                 end
-            )
-            task.delay(
-                1,
-                function()
-                    Velocity:Disconnect()
-                end
-            )
-            PlayAnim(
-                100558589307006, -- Animation ID
-                0, -- Time Position
-                1, -- Animation Speed
-                nil, -- When to stop the animation
-                .1, -- Play Tween
-                .4, -- End Tween
-                Enum.AnimationPriority.Action2
-                --Priority to show rather than other animations
-            )
-            task.wait(.5)
-            local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Throw.Throw:Clone()
-            Flake.CFrame = hrp.CFrame * CFrame.new(0, 0, -3)
-            Flake.Parent = char
-            Flake.Anchored = true
-            game:GetService("Debris"):AddItem(Flake, 5)
-            for _, Particle in ipairs(Flake:GetDescendants()) do
-                if Particle:IsA("ParticleEmitter") then
-                    Particle:Emit(15)
-                    Particle.Color =
-                        ColorSequence.new {
-                        ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
-                        ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
-                    }
-                end
-            end
-            local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Punch.Punch:Clone()
-            Flake.CFrame = hrp.CFrame * CFrame.new(0, 0, -5)
-            Flake.Parent = char
-            Flake.Anchored = true
-            game:GetService("Debris"):AddItem(Flake, 5)
-            for _, Particle in ipairs(Flake:GetDescendants()) do
-                if Particle:IsA("ParticleEmitter") then
-                    Particle:Emit(3)
-                    Particle.Color =
-                        ColorSequence.new {
-                        ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
-                        ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
-                    }
-                end
-            end
-
-            local sound = Instance.new("Sound")
-            sound.Parent = char.Head
-            sound.SoundId = "rbxassetid://12509593160"
-            sound:Play()
-            sound.PlaybackSpeed = 1 + math.random(-15, 15) / 254
-            task.delay(
-                .4,
-                function()
-                    game:GetService("TweenService"):Create(
-                        sound,
-                        TweenInfo.new(.5),
-                        {
-                            Volume = 0
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Punch.Punch:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, 0, -5)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(3)
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
                         }
-                    ):Play()
-                    task.wait(.5)
-                    sound:Destroy()
+                    end
                 end
-            )
+
+                local sound = Instance.new("Sound")
+                sound.Parent = char.Head
+                sound.SoundId = "rbxassetid://12685117669"
+                sound:Play()
+                sound.Volume = 1
+                sound.PlaybackSpeed = 1 + math.random(-15, 15) / 254
+                task.delay(
+                    .4,
+                    function()
+                        game:GetService("TweenService"):Create(
+                            sound,
+                            TweenInfo.new(.5),
+                            {
+                                Volume = 0
+                            }
+                        ):Play()
+                        task.wait(.5)
+                        sound:Destroy()
+                    end
+                )
+            elseif v.Animation.AnimationId == "rbxassetid://12510170988" then
+                v:Stop()
+                local Velocity =
+                    hrp.ChildAdded:Connect(
+                    function(child)
+                        if child:IsA("BodyVelocity") then
+                            child.MaxForce = Vector3.new(0, 0, 0)
+                        end
+                    end
+                )
+                task.delay(
+                    1,
+                    function()
+                        Velocity:Disconnect()
+                    end
+                )
+                PlayAnim(
+                    16945573694, -- Animation ID
+                    0, -- Time Position
+                    1, -- Animation Speed
+                    nil, -- When to stop the animation
+                    .1, -- Play Tween
+                    .4, -- End Tween
+                    Enum.AnimationPriority.Action2
+                    --Priority to show rather than other animations
+                )
+                task.wait(.7)
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Throw.Throw:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, 0, -3) * CFrame.Angles(math.rad(35), 0, 0)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(15)
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Punch.Punch:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, 0, -5) * CFrame.Angles(math.rad(35), 0, 0)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(3)
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+
+                local sound = Instance.new("Sound")
+                sound.Parent = char.Head
+                sound.SoundId = "rbxassetid://12509593160"
+                sound:Play()
+                sound.PlaybackSpeed = 1 + math.random(-15, 15) / 254
+                task.delay(
+                    .4,
+                    function()
+                        game:GetService("TweenService"):Create(
+                            sound,
+                            TweenInfo.new(.5),
+                            {
+                                Volume = 0
+                            }
+                        ):Play()
+                        task.wait(.5)
+                        sound:Destroy()
+                    end
+                )
+            elseif v.Animation.AnimationId == "rbxassetid://12447707844" then
+                v:Stop()
+
+                PlayAnim(
+                    129722512665420, -- Animation ID
+                    .6, -- Time Position
+                    1, -- Animation Speed
+                    .8, -- When to stop the animation
+                    .1, -- Play Tween
+                    .4, -- End Tween
+                    Enum.AnimationPriority.Action2
+                    --Priority to show rather than other animations
+                )
+                task.wait(.5)
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Throw.Throw:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, -3, 0) * CFrame.Angles(math.rad(90), 0, 0)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(15)
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Punch.Punch:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(90), 0, 0)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(3)
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Spin.Spin:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(90), 0, 0)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(3)
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+
+                local sound = Instance.new("Sound")
+                sound.Parent = char.Head
+                sound.SoundId = "rbxassetid://12509593160"
+                sound:Play()
+                sound.PlaybackSpeed = 1 + math.random(-15, 15) / 254
+                task.delay(
+                    .4,
+                    function()
+                        game:GetService("TweenService"):Create(
+                            sound,
+                            TweenInfo.new(.5),
+                            {
+                                Volume = 0
+                            }
+                        ):Play()
+                        task.wait(.5)
+                        sound:Destroy()
+                    end
+                )
+            elseif v.Animation.AnimationId == "rbxassetid://12983333733" then
+                v:Stop()
+
+                PlayAnim(
+                    94020267622363, -- Animation ID
+                    9, -- Time Position
+                    .5, -- Animation Speed
+                    nil, -- When to stop the animation
+                    .5, -- Play Tween
+                    .4, -- End Tween
+                    Enum.AnimationPriority.Action2
+                    --Priority to show rather than other animations
+                )
+                task.wait(1.2)
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Throw.Throw:Clone()
+                Flake.CFrame = char.Torso.CFrame * CFrame.new(0, -3, 0) * CFrame.Angles(math.rad(90), 0, 0)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(15)
+                        Particle.Enabled = true
+                        Particle.Rotation = NumberRange.new(-360, 360)
+                        game:GetService("TweenService"):Create(
+                            Particle,
+                            TweenInfo.new(5),
+                            {
+                                Rate = 100
+                            }
+                        ):Play()
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Punch.Punch:Clone()
+                Flake.CFrame = char.Torso.CFrame * CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(90), 0, 0)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(3)
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Spin.Spin:Clone()
+                Flake.CFrame = char.Torso.CFrame * CFrame.new(0, 0, 0) * CFrame.Angles(math.rad(90), 0, 0)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(3)
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+
+                local sound = Instance.new("Sound")
+                sound.Parent = char.Head
+                sound.SoundId = "rbxassetid://12509593160"
+                sound:Play()
+                sound.PlaybackSpeed = 1 + math.random(-15, 15) / 254
+                task.delay(
+                    .4,
+                    function()
+                        game:GetService("TweenService"):Create(
+                            sound,
+                            TweenInfo.new(.5),
+                            {
+                                Volume = 0
+                            }
+                        ):Play()
+                        task.wait(.5)
+                        sound:Destroy()
+                    end
+                )
+                local sound = Instance.new("Sound")
+                sound.Parent = char.Head
+                sound.SoundId = "rbxassetid://12685117669"
+                sound:Play()
+                sound.PlaybackSpeed = 1 + math.random(-15, 15) / 254
+                task.delay(
+                    .4,
+                    function()
+                        game:GetService("TweenService"):Create(
+                            sound,
+                            TweenInfo.new(.5),
+                            {
+                                Volume = 0
+                            }
+                        ):Play()
+                        task.wait(.5)
+                        sound:Destroy()
+                    end
+                )
+
+                task.wait(5)
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Throw2.Throw2:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, 0, -3)
+                Flake.Parent = char
+                Flake.Anchored = true
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(15)
+
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+                local Flake = game:GetService("ReplicatedStorage").Resources.Chain.Punch.Punch:Clone()
+                Flake.CFrame = hrp.CFrame * CFrame.new(0, 0, -5)
+                Flake.Parent = char
+                Flake.Anchored = true
+
+                game:GetService("Debris"):AddItem(Flake, 5)
+                for _, Particle in ipairs(Flake:GetDescendants()) do
+                    if Particle:IsA("ParticleEmitter") then
+                        Particle:Emit(3)
+
+                        Particle.Color =
+                            ColorSequence.new {
+                            ColorSequenceKeypoint.new(0, Color3.new(1, 0, 0)),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 1))
+                        }
+                    end
+                end
+            end
         end
-    end
-)
-char:SetAttribute("UltimateName", "CANSOL")
+    )
+    char:SetAttribute("UltimateName", "CANSOL")
 end
 Start()
 
-getgenv().pepe = game.Players.LocalPlayer.CharacterAdded:Connect(function(c)
-repeat task.wait() until game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart')
-Start()
-end)
+game.Players.LocalPlayer.CharacterAdded:Connect(
+    function(c)
+        repeat
+            task.wait()
+        until game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+        Start()
+    end
+)
 
 game:GetService("StarterGui"):SetCore(
     "SendNotification",
@@ -483,3 +717,5 @@ game:GetService("StarterGui"):SetCore(
         Duration = 13
     }
 )
+
+-- Update 1: Added ultimate animation, Added serious punch
